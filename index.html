@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>紙飛行機ゲーム</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- ジャンプボタン -->
+        <button id="jump-button" class="jump-button hidden">↑</button>
+        
+        <!-- スタート画面 -->
+        <div id="game-start">
+            <div class="game-title">Kami Flight</div>
+            <div class="game-instructions">
+                <h2>操作方法</h2>
+                <div class="instruction-text">
+                    画面をタップで方向転換
+                </div>
+                <div class="instruction-text">
+                    左下ボタンをタップで少しジャンプ！
+                </div>
+                <div class="instruction-text">
+                    障害物を避けて、ゴールを目指せ！
+                </div>
+            </div>
+            <button id="start-button" class="game-button">スタート</button>
+        </div>
+        
+        <!-- ゲームオーバー画面 -->
+        <div id="game-over" class="game-screen hidden">
+            <div class="game-title">GAME OVER</div>
+            <p id="final-score"></p>
+            <button id="restart-button" class="game-button">タイトルに戻る</button>
+        </div>
+        
+        <!-- ゲームクリア画面 -->
+        <div id="game-clear" class="game-screen hidden">
+            <div class="game-title">おめでとう🎉</div>
+            <div class="celebration-message">
+                <div class="celebration-text">
+                    🎊 ゴール到達！ 🎊
+                </div>
+                <div class="celebration-text">
+                    実に見事な飛行でした！
+                </div>
+                <div class="celebration-text">
+                    ✈️ 🌟 ✈️
+                </div>
+            </div>
+            <button id="play-again-button" class="game-button">タイトルに戻る</button>
+        </div>
+    </div>
+    
+    <!-- 分離したクラスファイルを読み込み -->
+    <script src="utils.js"></script>
+    <script src="Plane.js"></script>
+    <script src="ObstacleManager.js"></script>
+    <script src="CloudManager.js"></script>
+    <script src="DebugLogger.js"></script>
+    <script src="Game.js"></script>
+</body>
+</html>

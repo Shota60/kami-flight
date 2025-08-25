@@ -1,0 +1,281 @@
+/* ===== リセット・ベーススタイル ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #7dd3c0, #d4f1f4, #a8e6cf);
+    display: box;
+    min-height: 100vh;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ===== ゲームコンテナ ===== */
+#game-container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: #E0F6FF;
+    border: 2px solid #000000;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* ===== スタート画面 ===== */
+#game-start {
+    background: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    width: 100%;
+}
+
+#game-start .game-title {
+    color: #000b26;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 28px;
+    text-align: center;
+    letter-spacing: 2px;
+    font-family: 'Yuji Boku', serif;
+}
+
+.game-instructions {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    max-width: 350px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.game-instructions h2 {
+    color: #ff6262;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.instruction-text {
+    color: #222;
+    font-size: 18px;
+    line-height: 1.4;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+/* ===== ゲームオーバー画面 ===== */
+#game-over {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    min-width: 280px;
+}
+
+#game-over .game-title {
+    color: #ff444d;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+#game-over #final-score {
+    color: #222;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* ===== ゲームクリア画面 ===== */
+#game-clear {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    min-width: 280px;
+}
+
+#game-clear .game-title {
+    color: #da4f4f;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 24px;
+}
+
+/* ===== 共通要素 ===== */
+#game-over p, #game-start p, #game-clear p {
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 16px;
+}
+
+#game-clear .celebration-message {
+    margin-bottom: 32px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* ===== ボタンスタイル ===== */
+.game-button {
+    display: block;
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: auto;
+    min-width: 250px;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.game-button:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.game-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+#restart-button {
+    background: linear-gradient(135deg, #FF6B6B, #FF5252);
+}
+
+#restart-button:hover {
+    background: linear-gradient(135deg, #FF5252, #FF6B6B);
+}
+
+#play-again-button {
+    background: linear-gradient(135deg, #2196F3, #1976D2);
+}
+
+#play-again-button:hover {
+    background: linear-gradient(135deg, #1976D2, #1565C0);
+}
+
+.jump-button {
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: none;
+    background: #3281e2eb;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    outline: none;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s ease;
+    z-index: 1000;
+}
+
+.jump-button.active {
+    transform: scale(0.9);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.3);
+}
+
+.jump-button.hidden {
+    display: none;
+}
+
+/* ===== レスポンシブデザイン ===== */
+/* モバイル対応 */
+@media (max-width: 480px) {
+    #game-container {
+        max-width: 100%;
+        padding: 10px;
+    }
+    
+    #gameCanvas {
+        border-width: 1px;
+    }
+    
+    #game-over, #game-start {
+        min-width: 250px;
+        padding: 20px;
+    }
+    
+    .game-instructions {
+        padding: 20px;
+        margin-bottom: 32px;
+        max-width: 300px;
+    }
+    
+    .game-instructions h2 {
+        font-size: 18px;
+    }
+    
+    .instruction-text {
+        font-size: 14px;
+    }
+}
+
+/* パソコン向けのレスポンシブ対応 */
+@media (min-width: 768px) {
+    #game-container {
+        max-width: 600px;
+    }
+    
+    #gameCanvas {
+        border-width: 3px;
+    }
+    
+    .game-button {
+        min-width: 300px;
+        padding: 20px 40px;
+        font-size: 20px;
+    }
+    
+    .game-instructions {
+        max-width: 500px;
+        padding: 30px;
+    }
+    
+    .game-instructions h2 {
+        font-size: 24px;
+    }
+    
+    .instruction-text {
+        font-size: 16px;
+    }
+}
