@@ -4,8 +4,8 @@ class ObstacleManager {
     this.camera = camera;
     this.goalY = goalY;
     this.obstacles = [];
-    this.obstacleSpeed = 0;
     this.obstacleSpawnTimer = 0;
+    this.spawnIntervalDecreaseAmount = difficultySettings.spawnIntervalDecreaseAmount;
     this.initialObstacleSpawnInterval = difficultySettings.initialObstacleSpawnInterval;
     this.obstacleSpawnInterval = this.initialObstacleSpawnInterval;
     this.minObstacleSpawnInterval = difficultySettings.minimumObstacleSpawnInterval;
@@ -109,19 +109,6 @@ class ObstacleManager {
     if (this.obstacleSpawnTimer >= this.obstacleSpawnInterval) {
       this.spawnObstacle();
       this.obstacleSpawnTimer = 0;
-      // 難易度上昇（障害物の間隔を狭く）、最小値を考慮
-      const oldInterval = this.obstacleSpawnInterval;
-      this.obstacleSpawnInterval = Math.max(
-        this.minObstacleSpawnInterval,
-        this.obstacleSpawnInterval - 1
-      );
-
-      // 値が変更された場合のみコンソールログに出力
-      if (oldInterval !== this.obstacleSpawnInterval) {
-        console.log(
-          `update obstacle spawn interval: ${oldInterval} → ${this.obstacleSpawnInterval}`
-        );
-      }
     }
 
     return false; // スコア加算不要
@@ -192,6 +179,19 @@ class ObstacleManager {
     this.initialObstacleSpawnInterval = difficultySettings.initialObstacleSpawnInterval;
     this.minObstacleSpawnInterval = difficultySettings.minimumObstacleSpawnInterval;
     this.obstacleSpawnInterval = this.initialObstacleSpawnInterval;
-    this.obstacleSpeedMultiplier = difficultySettings.obstacleSpeedMultiplier || 1.0;
+  }
+
+  // 距離ベースの障害物生成間隔更新メソッド
+  updateSpawnInterval() {
+    const oldInterval = this.obstacleSpawnInterval;
+    this.obstacleSpawnInterval = Math.max(
+      this.minObstacleSpawnInterval,
+      this.obstacleSpawnInterval - this.spawnIntervalDecreaseAmount
+    );
+
+    // 値が変更された場合のみコンソールログに出力
+    if (oldInterval !== this.obstacleSpawnInterval) {
+      console.log(`update obstacle spawn interval : ${oldInterval}→${this.obstacleSpawnInterval}`);
+    }
   }
 }

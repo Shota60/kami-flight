@@ -45,13 +45,6 @@ class Plane {
     this.verticalSpeed = -this.jumpSpeed;
   }
 
-  reset() {
-    this.x = this.canvas.width / 2;
-    this.y = this.canvas.height / 2;
-    this.direction = "left";
-    this.verticalSpeed = 0;
-  }
-
   draw(ctx) {
     ctx.save();
     ctx.translate(this.x + this.size / 2, this.canvas.height / 2 + this.size / 2);

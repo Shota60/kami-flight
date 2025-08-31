@@ -1,8 +1,9 @@
 class PaperPlaneGame {
   // ==================== クラス定数 ====================
   static GAME_CONFIG = {
-    GOAL_DISTANCE: 10000,
+    GOAL_DISTANCE: 1000,
     PIXELS_PER_METER: 100,
+    DISTANCE_CHECK_INTERVAL: 1000,
     DISPLAY_DEBUG_LOG: false,
   };
 
@@ -10,15 +11,15 @@ class PaperPlaneGame {
   static DIFFICULTY_SETTINGS = {
     normal: {
       name: "ふつう",
-      initialObstacleSpawnInterval: 110,
-      minimumObstacleSpawnInterval: 45,
-      obstacleSpeedMultiplier: 1.0,
+      initialObstacleSpawnInterval: 120,
+      minimumObstacleSpawnInterval: 50,
+      spawnIntervalDecreaseAmount: 10,
     },
     hard: {
       name: "むずかしい",
-      initialObstacleSpawnInterval: 80,
+      initialObstacleSpawnInterval: 72,
       minimumObstacleSpawnInterval: 30,
-      obstacleSpeedMultiplier: 1.3,
+      spawnIntervalDecreaseAmount: 6,
     },
   };
 
@@ -59,6 +60,9 @@ class PaperPlaneGame {
     this.goalY = this.startY + PaperPlaneGame.GAME_CONFIG.GOAL_DISTANCE;
     this.remainingDistance = PaperPlaneGame.GAME_CONFIG.GOAL_DISTANCE;
     this.camera = { x: 0, y: 0 };
+    // 距離ベースの障害物生成間隔更新用の変数
+    this.lastDistanceCheck = this.startY;
+    this.distanceCheckInterval = PaperPlaneGame.GAME_CONFIG.DISTANCE_CHECK_INTERVAL; // 1000ピクセル（10メートル）ごとにチェック
     // 難易度設定を適用
     this.initialObstacleSpawnInterval = this.difficultySettings.initialObstacleSpawnInterval;
     this.minObstacleSpawnInterval = this.difficultySettings.minimumObstacleSpawnInterval;
@@ -225,16 +229,17 @@ class PaperPlaneGame {
   // ==================== ゲーム状態管理 ====================
 
   startGame() {
+    console.log("GAME START");
     this.gameState = "playing";
     this.gameStartTime = Date.now();
     this.remainingDistance = this.goalY;
+    this.lastDistanceCheck = this.remainingDistance - this.startY; // 距離チェック用変数をリセット
     this.obstacleManager.reset();
     this.cloudManager.reset();
     this.obstacleManager.updateGoalY(this.goalY);
     this.camera.x = 0;
     this.camera.y = 0;
     this.obstacleSpawnInterval = this.initialObstacleSpawnInterval;
-    this.plane.reset();
     this.hideStartScreen();
     this.hideGameClearScreen();
     this.jumpButton.classList.remove("hidden");
@@ -280,6 +285,7 @@ class PaperPlaneGame {
     this.cloudManager.reset();
     this.toggleScreen("game-start", true);
     this.jumpButton.classList.add("hidden");
+    this.initializeGameState();
   }
 
   hideStartScreen() {
@@ -287,6 +293,7 @@ class PaperPlaneGame {
   }
 
   showGameOverScreen() {
+    console.log("GAME OVER");
     this.gameState = "gameOver";
     const distanceInMeters = this.pixelsToMeters(this.remainingDistance).toFixed(1);
     const halfGoalDistance =
@@ -310,6 +317,7 @@ class PaperPlaneGame {
   }
 
   showGameClearScreen() {
+    console.log("GAME CLEAR");
     this.gameState = "gameClear";
 
     // 難易度情報を表示
@@ -329,12 +337,33 @@ class PaperPlaneGame {
   // ==================== ゲーム更新処理 ====================
 
   update() {
+    // 雲更新
     this.updateClouds();
 
+    // ゲーム中の場合
     if (this.gameState === "playing") {
       this.updateCamera();
-      this.updatePlane();
+      this.plane.update();
+      // ゲームオーバーチェック
+      if (this.plane.x < 0 || this.plane.x + this.plane.size > this.canvas.width) {
+        this.gameOver();
+        return;
+      }
+      // ゲームクリアチェック
+      if (this.remainingDistance <= 0) {
+        this.remainingDistance = 0;
+        this.gameClear();
+      }
+      // 距離ベースの障害物生成間隔更新チェック
+      this.remainingDistance = this.goalY - this.plane.y;
+      if (this.remainingDistance <= this.lastDistanceCheck - this.distanceCheckInterval) {
+        this.lastDistanceCheck = this.remainingDistance;
+        console.log("remainingDistance : ", Math.floor(this.remainingDistance));
+        this.obstacleManager.updateSpawnInterval();
+      }
+      // 障害物更新
       this.updateObstacles();
+      // 衝突チェック
       this.checkCollisions();
     }
 
@@ -354,22 +383,6 @@ class PaperPlaneGame {
 
   updateCamera() {
     this.camera.y = this.plane.y;
-  }
-
-  updatePlane() {
-    this.plane.update();
-
-    if (this.plane.x < 0 || this.plane.x + this.plane.size > this.canvas.width) {
-      this.gameOver();
-      return;
-    }
-
-    this.remainingDistance = this.goalY - this.plane.y;
-
-    if (this.remainingDistance <= 0) {
-      this.remainingDistance = 0;
-      this.gameClear();
-    }
   }
 
   updateObstacles() {

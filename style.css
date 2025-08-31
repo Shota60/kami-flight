@@ -168,7 +168,7 @@ body {
 #game-over #final-score {
   color: #222;
   font-size: 14px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .difficulty-info {
@@ -203,7 +203,7 @@ body {
 #game-over p,
 #game-start p,
 #game-clear p {
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   color: #555;
   font-size: 16px;
 }
