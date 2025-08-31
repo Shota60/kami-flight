@@ -1,7 +1,7 @@
 class PaperPlaneGame {
   // ==================== クラス定数 ====================
   static GAME_CONFIG = {
-    GOAL_DISTANCE: 1000,
+    GOAL_DISTANCE: 10000,
     PIXELS_PER_METER: 100,
     DISTANCE_CHECK_INTERVAL: 1000,
     DISPLAY_DEBUG_LOG: false,
@@ -319,6 +319,39 @@ class PaperPlaneGame {
   showGameClearScreen() {
     console.log("GAME CLEAR");
     this.gameState = "gameClear";
+
+    // 難易度に応じたクリアメッセージを設定
+    const clearMessages = {
+      normal: {
+        title: "おめでとう🎉",
+        messages: ["🎊 ゴール到達！ 🎊", "実に見事な飛行でした！", "✈️ 🌟 ✈️"],
+      },
+      hard: {
+        title: "伝説のパイロット<br>誕生！🏆",
+        messages: [
+          "🎊 極限の難易度を制覇！ 🎊",
+          "あなたは真の飛行の達人だ！",
+          "この偉業は永遠に語り継がれるでしょう",
+          "✈️ 🌟 🏅 ✈️",
+        ],
+      },
+    };
+
+    const currentMessages = clearMessages[this.currentDifficulty];
+
+    // タイトルを更新
+    const titleElement = document.querySelector("#game-clear .game-title");
+    if (titleElement) {
+      titleElement.innerHTML = currentMessages.title;
+    }
+
+    // メッセージを更新
+    const messageElements = document.querySelectorAll("#game-clear .celebration-text");
+    currentMessages.messages.forEach((message, index) => {
+      if (messageElements[index]) {
+        messageElements[index].textContent = message;
+      }
+    });
 
     // 難易度情報を表示
     const difficultyInfo = document.getElementById("difficulty-info");
